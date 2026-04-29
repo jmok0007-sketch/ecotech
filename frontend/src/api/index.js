@@ -1,7 +1,4 @@
-const API_SITE = (
-  import.meta.env.VITE_API_SITE ||
-  'http://ecotech-backend-prod.eba-muzmzyza.ap-southeast-2.elasticbeanstalk.com/api'
-).replace(/\/$/, '')
+const API_SITE = '/api'
 
 async function request(baseUrl, path, options = {}) {
   const response = await fetch(`${baseUrl}${path}`, {
