@@ -1,0 +1,15 @@
+-- Use this file for forward-only schema migrations after the initial deploy.
+-- Each ALTER block should be prefixed with a date and short description so
+-- the team can track what changed and when.
+--
+-- Example:
+--
+--   -- 2026-05-15: track when a disposal facility was last verified
+--   ALTER TABLE ewaste_facilities
+--       ADD COLUMN IF NOT EXISTS last_verified_at TIMESTAMP;
+--
+--   -- 2026-06-02: add a recycling potential score
+--   ALTER TABLE ewaste_facilities
+--       ADD COLUMN IF NOT EXISTS recycling_potential SMALLINT;
+
+-- (no migrations applied yet)

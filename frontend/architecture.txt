@@ -1,0 +1,63 @@
+TA14-EcoTech Architecture Graph
+================================
+
+[User Browser]
+    |
+    v
+[index.html]
+    |
+    v
+[src/main.js]
+    |
+    v
+[Vue Application Root: src/App.vue]
+    |
+    +------------------> [Navigation Bar]
+    |
+    +------------------> [Router View]
+                            |
+                            v
+                     [src/router/index.js]
+                            |
+                            +--> "/"                   -> [Home.vue]
+                            +--> "/dashboard"          -> [Dashboard.vue]
+                            +--> "/repair-check"       -> [RepairCheck.vue]
+                            +--> "/extend-usage"       -> [ExtendUsage.vue]
+                            +--> "/ai-chat"            -> [AIChat.vue]
+                            |                               |
+                            |                               v
+                            |                         [src/api/index.js]
+                            |                               |
+                            |                               v
+                            |     [Azure Backend]
+                            |     https://ta14-ecotech-backend-ecf9e5hca9fpf7da
+                            |     .australiaeast-01.azurewebsites.net/api
+                            |                               |
+                            |                               +--> GET /GetPerson
+                            |
+                            +--> "/safe-guidance"      -> [SafeGuidance.vue]
+                            +--> "/disposal-locations" -> [DisposalLocations.vue]
+
+
+Layer Summary
+-------------
+1. Presentation layer:
+   Vue views in `src/views`
+
+2. Routing layer:
+   Centralized route definitions in `src/router/index.js`
+
+3. Integration layer:
+   Shared fetch wrapper in `src/api/index.js`
+
+4. Backend layer:
+   External Azure-hosted API, not included in this repository
+
+
+Current interface contract observed in repo
+------------------------------------------
+- Frontend method: `api.getPerson()`
+- HTTP method: `GET`
+- Endpoint: `/api/GetPerson`
+- Response handling: `response.json()`
+- Consumer: `src/views/AIChat.vue`

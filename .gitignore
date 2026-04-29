@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+
+# Node
+node_modules/
+dist/
+.cache/
+.vite/
+npm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# AWS
+.elasticbeanstalk/
+.aws-sam/
+
+# Build / coverage
+*.log
+.coverage
+htmlcov/
+
+# Large local data — keep CSVs in seeds/, but never commit raw scratch files
+database/seeds/*.bak
+database/seeds/raw/
+
+# Frontend env (committed example only)
+frontend/.env.local
+frontend/.env.production
+
+# Backend env
+backend/.env.local
