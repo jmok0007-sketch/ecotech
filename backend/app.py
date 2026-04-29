@@ -3,6 +3,7 @@
 Run locally:  python app.py
 Run in EB:    gunicorn app:app
 """
+
 from flask import Flask, jsonify
 from flask_cors import CORS
 
@@ -15,6 +16,9 @@ from routes.chat_routes import chat_bp
 
 
 def create_app() -> Flask:
+    # Validate env variables before app starts
+    Config.validate()
+
     app = Flask(__name__)
     app.config.from_object(Config)
 
@@ -22,16 +26,19 @@ def create_app() -> Flask:
 
     init_pool()
 
-    # Healthcheck (used by EB load balancer)
     @app.route("/")
     def index():
-        return jsonify({"service": "ecotech-backend", "status": "ok"})
+        return jsonify({
+            "service": "ecotech-backend",
+            "status": "ok"
+        })
 
-    @app.route("/api/health")
+    @app.route("/api/healthcheck")
     def healthcheck():
-        return jsonify({"status": "ok"})
+        return jsonify({
+            "status": "ok"
+        })
 
-    # Feature blueprints
     app.register_blueprint(health_bp, url_prefix="/api/health")
     app.register_blueprint(emissions_bp, url_prefix="/api/emissions")
     app.register_blueprint(disposal_bp, url_prefix="/api/map")
@@ -43,11 +50,10 @@ def create_app() -> Flask:
 
     @app.errorhandler(500)
     def server_error(err):
-        return jsonify({"detail": "Internal server error", "error": str(err)}), 500
-
-    @app.teardown_appcontext
-    def teardown(_):
-        pass
+        return jsonify({
+            "detail": "Internal server error",
+            "error": str(err)
+        }), 500
 
     return app
 
@@ -57,6 +63,10 @@ app = create_app()
 
 if __name__ == "__main__":
     try:
-        app.run(host="0.0.0.0", port=Config.PORT, debug=Config.DEBUG)
+        app.run(
+            host="0.0.0.0",
+            port=Config.PORT,
+            debug=Config.DEBUG
+        )
     finally:
         close_pool()

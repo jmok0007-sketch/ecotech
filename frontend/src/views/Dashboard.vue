@@ -323,19 +323,36 @@ function handleResize() {
   stateChart?.resize()
 }
 
+function extractItems(response) {
+  if (Array.isArray(response)) return response
+  if (Array.isArray(response?.items)) return response.items
+  return []
+}
+
 async function loadData() {
   try {
     loading.value = true
     error.value = ''
-    const [h, s, f] = await Promise.all([
+
+    const [healthResponse, stateResponse, facilityResponse] = await Promise.all([
       api.getHealthAll(),
       api.getHeavyMetalState(),
       api.getHeavyMetalFacility(),
     ])
-    healthData.value = Array.isArray(h?.items) ? h.items : []
-    stateData.value = Array.isArray(s?.items) ? s.items : []
-    facilityData.value = Array.isArray(f?.items) ? f.items : []
+
+    healthData.value = extractItems(healthResponse)
+    stateData.value = extractItems(stateResponse)
+    facilityData.value = extractItems(facilityResponse)
+
+    console.log('✅ healthData:', healthData.value.length, healthData.value[0])
+    console.log('✅ stateData:', stateData.value.length, stateData.value[0])
+    console.log('✅ facilityData:', facilityData.value.length, facilityData.value[0])
+
+    if (!healthData.value.length || !stateData.value.length) {
+      throw new Error('API responded, but dashboard received empty data arrays.')
+    }
   } catch (e) {
+    console.error('Dashboard load error:', e)
     error.value = e?.message || 'Failed to load dashboard data.'
   } finally {
     loading.value = false
