@@ -16,13 +16,26 @@ from routes.chat_routes import chat_bp
 
 
 def create_app() -> Flask:
-    # Validate env variables before app starts
     Config.validate()
 
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    CORS(app, resources={r"/api/*": {"origins": Config.CORS_ORIGINS}})
+    CORS(
+        app,
+        resources={
+            r"/api/*": {
+                "origins": [
+                    "https://main.d2wxyj4448wtrh.amplifyapp.com",
+                    "http://localhost:5173",
+                    "http://localhost:3000",
+                ],
+                "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+                "allow_headers": ["Content-Type", "Authorization"],
+            }
+        },
+        supports_credentials=False,
+    )
 
     init_pool()
 
