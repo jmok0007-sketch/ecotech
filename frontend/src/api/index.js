@@ -1,43 +1,43 @@
-const API_SITE = '/api'
+const API_SITE = import.meta.env.VITE_API_SITE || "/api";
 
-async function request(baseUrl, path, options = {}) {
-  const response = await fetch(`${baseUrl}${path}`, {
+async function request(path, options = {}) {
+  const response = await fetch(`${API_SITE}${path}`, {
     ...options,
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...(options.headers || {}),
     },
-  })
+  });
 
   if (!response.ok) {
-    const text = await response.text()
-    throw new Error(`API request failed: ${response.status} - ${text}`)
+    const text = await response.text();
+    throw new Error(`API error ${response.status}: ${text}`);
   }
 
-  return response.json()
+  return response.json();
 }
 
 export const api = {
+  getHealthAll() {
+    return request("/health/all");
+  },
+
   getHeavyMetalState() {
-    return request(API_SITE, '/emissions/state')
+    return request("/emissions/state");
   },
 
   getHeavyMetalFacility() {
-    return request(API_SITE, '/emissions/facility')
-  },
-
-  getHealthAll() {
-    return request(API_SITE, '/health/all')
+    return request("/emissions/facility");
   },
 
   searchDisposalLocations(options = {}) {
-    return request(API_SITE, '/map/disposal-locations', options)
+    return request("/map/disposal-locations", options);
   },
 
   getDeviceOptimizationTips(payload) {
-    return request(API_SITE, '/ai/device-optimizer', {
-      method: 'POST',
+    return request("/ai/device-optimizer", {
+      method: "POST",
       body: JSON.stringify(payload),
-    })
+    });
   },
-}
+};
