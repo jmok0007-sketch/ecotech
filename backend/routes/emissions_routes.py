@@ -17,34 +17,28 @@ def by_state():
 
 @emissions_bp.route("/facility", methods=["GET"])
 def by_facility():
+    """Get paginated facility emissions data (max 100 per page).
+
+    Query parameters:
+    - limit: rows per page (1-100, default 50)
+    - page: page number (default 1)
+    """
     try:
         limit = request.args.get("limit", default=50, type=int)
+        page = request.args.get("page", default=1, type=int)
 
-        if limit < 1:
-            limit = 50
+        # Validate page
+        page = max(1, page)
 
-        if limit > 100:
-            limit = 100
+        # Calculate offset from page number
+        offset = (page - 1) * limit
 
-        data = emissions_service.list_by_facility()
+        # Fetch paginated data
+        result = emissions_service.list_by_facility(limit=limit, offset=offset)
 
-        # Sort by lead value if available
-        data = sorted(
-            data,
-            key=lambda x: float(
-                x.get("lead") or
-                x.get("lead_kg") or
-                x.get("Lead") or
-                0
-            ),
-            reverse=True
-        )
-
-        data = data[:limit]
-
-        return ok(data, meta={
-            "count": len(data),
-            "limit": limit
+        return ok(result['data'], meta={
+            "count": len(result['data']),
+            "pagination": result['pagination']
         })
 
     except Exception as e:

@@ -14,5 +14,13 @@ SELECT_BY_FACILITY = """
            total_air_emission_kg, total_water_emission_kg, total_land_emission_kg
     FROM heavy_metal_facility
     WHERE latitude IS NOT NULL AND longitude IS NOT NULL
-    ORDER BY report_year, state, facility_name
+    ORDER BY total_air_emission_kg DESC, report_year DESC
+    LIMIT ? OFFSET ?
+"""
+
+# Count total facilities for pagination metadata
+COUNT_FACILITIES = """
+    SELECT COUNT(*) as total
+    FROM heavy_metal_facility
+    WHERE latitude IS NOT NULL AND longitude IS NOT NULL
 """
