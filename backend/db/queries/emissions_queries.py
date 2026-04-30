@@ -15,7 +15,7 @@ SELECT_BY_FACILITY = """
     FROM heavy_metal_facility
     WHERE latitude IS NOT NULL AND longitude IS NOT NULL
     ORDER BY total_air_emission_kg DESC, report_year DESC
-    LIMIT ? OFFSET ?
+    LIMIT %s OFFSET %s
 """
 
 # Count total facilities for pagination metadata
