@@ -6,6 +6,13 @@ SELECT_ALL = """
     FROM ewaste_facilities
     WHERE latitude IS NOT NULL AND longitude IS NOT NULL
     ORDER BY state, suburb, facility_name
+    LIMIT %s OFFSET %s
+"""
+
+SELECT_ALL_COUNT = """
+    SELECT COUNT(*) as total
+    FROM ewaste_facilities
+    WHERE latitude IS NOT NULL AND longitude IS NOT NULL
 """
 
 SELECT_BY_POSTCODE = """

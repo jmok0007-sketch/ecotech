@@ -24,11 +24,17 @@ def by_facility():
     - page: page number (default 1)
     """
     try:
+        # Get and validate parameters
         limit = request.args.get("limit", default=50, type=int)
         page = request.args.get("page", default=1, type=int)
 
-        # Validate page
-        page = max(1, page)
+        # Validate page (must be >= 1)
+        if page < 1:
+            page = 1
+
+        # Validate limit (must be 1-100)
+        if limit < 1 or limit > 100:
+            limit = 50
 
         # Calculate offset from page number
         offset = (page - 1) * limit
@@ -42,4 +48,7 @@ def by_facility():
         })
 
     except Exception as e:
-        return fail(f"Database error: {e}", 503)
+        import traceback
+        error_detail = f"{type(e).__name__}: {str(e)}"
+        traceback.print_exc()
+        return fail(f"Database error: {error_detail}", 503)

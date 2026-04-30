@@ -38,3 +38,5 @@ frontend/.env.production
 
 # Backend env
 backend/.env.local
+backend/*.zip
+backend/*.zip
