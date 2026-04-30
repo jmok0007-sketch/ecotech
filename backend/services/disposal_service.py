@@ -21,7 +21,7 @@ def list_all(limit: int = 100, offset: int = 0) -> dict:
     with get_cursor() as (_, cur):
         # Get total count
         cur.execute(q.SELECT_ALL_COUNT)
-        total = cur.fetchone()[0]
+        total = cur.fetchone()['total']
 
         # Get paginated data
         cur.execute(q.SELECT_ALL, (limit, offset))

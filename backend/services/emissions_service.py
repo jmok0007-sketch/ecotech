@@ -28,7 +28,7 @@ def list_by_facility(limit: int = 50, offset: int = 0) -> dict:
     with get_cursor() as (_, cur):
         # Get total count
         cur.execute(q.COUNT_FACILITIES)
-        total = cur.fetchone()[0]
+        total = cur.fetchone()['total']
 
         # Get paginated data
         cur.execute(q.SELECT_BY_FACILITY, (limit, offset))
